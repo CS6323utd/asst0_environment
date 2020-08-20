@@ -10,13 +10,6 @@ include_directories(
     ${GLFW_INCLUDE_DIRS}
 )
 
-include_directories(
-    ${APPLICATION_EXTERNAL}/nanogui/include
-    ${APPLICATION_EXTERNAL}/nanogui/ext/eigen
-    ${APPLICATION_EXTERNAL}/nanogui/ext/nanovg/src
-    ${APPLICATION_EXTERNAL}/nanogui/ext/glfw
-)
-
 if (WIN32)
     include_directories(dirent)
 endif(WIN32)

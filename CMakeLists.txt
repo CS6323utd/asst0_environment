@@ -193,6 +193,12 @@ set(NANOGUI_BUILD_SHARED  OFF  CACHE BOOL " " FORCE)
 
 # install nanogui and build
 include(Dependencies)
+include_directories(
+    ${APPLICATION_EXTERNAL}/nanogui/include
+    ${APPLICATION_EXTERNAL}/nanogui/ext/eigen
+    ${APPLICATION_EXTERNAL}/nanogui/ext/nanovg/src
+    ${APPLICATION_EXTERNAL}/nanogui/ext/glfw
+)
 
 # NanoGUI merges the glfw objects into the library being built, 
 # you can actually just specify nanogui as the glfw dependency directly.
