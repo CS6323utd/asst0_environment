@@ -8,6 +8,11 @@
 #include <sstream>
 #include <fstream>
 
+#include <filesystem>
+
+
+
+
 class Shader {
 public:
 	GLuint program;
@@ -19,7 +24,9 @@ public:
 		std::ifstream f_shader_file;
 		std::ifstream g_shader_file;
 
+
 		std::cout << "vertex_shader_path: " << vertex_shader_path << std::endl;
+		std::cout << "fragment_shader_path: " << fragment_shader_path << std::endl;
 
 		v_shader_file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 		f_shader_file.exceptions(std::ifstream::failbit | std::ifstream::badbit);

@@ -37,6 +37,7 @@
 
 using namespace nanogui;
 
+
 enum test_enum {
     Item1 = 0,
     Item2,

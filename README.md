@@ -68,7 +68,7 @@ $ brew install glfw3
 To build your code for this assignment:
 - Create a directory to build your code:
 ```
-cd p1 && mkdir build && cd build
+$ cd asst0_environment && mkdir build && cd build
 ```
 
 - Run CMake to generate makefile (might take a while for the first run):
@@ -81,6 +81,7 @@ $ cmake ..
 $ make
 ```
 
+#### Run
 
 To run your executable file, simply
 ```
