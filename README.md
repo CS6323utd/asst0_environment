@@ -36,16 +36,24 @@ $ gcc -v
 $ xcode-select -p
 ```
 
-2. GLEW and GLFW
+2. GLEW
 If you installed Homebrew, simply just run:
 ```
 $ brew update
-$ brew install glfw3 glew
+$ brew install glew
 ```
 
 3. NanoGUI
 We setup these dependencies in our cmake/*.cmake files, therefore, you don't need to do anything about it.
 
+
+4. GLFW
+We will use the GLFW provided in NanoGUI, therefore, you don't need to do anything about it.
+If you want to use system GLFW, you can run following command to install GLFW then update CMakeLists.txt
+```
+# OPTIONAL
+$ brew install glfw3
+```
 
 To build your code for this assignment:
 - Create a directory to build your code:
