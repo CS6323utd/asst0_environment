@@ -71,6 +71,8 @@ $ ./hello
 
 
 ### Linux (In progress)
+```
 $ sudo apt-get install libxinerama-dev
 $ sudo apt-get install libxcursor-dev
 $ sudo apt-get install libglew-dev libglfw3 libglfw3-dev libglm-dev pkg-config
+```
