@@ -45,8 +45,10 @@ We provide GLEW in our library, therefore, you **DO NOT** need to do anything.
 
 However, If you want to use system GLEW, you can run following command to install GLEW then update CMakeLists.txt ON YOUR OWN.
 ```
-######## OPTIONAL
+######## OPTIONAL ######## 
 $ brew install glew
+# remember to update CMakeLists.txt
+######## OPTIONAL ######## 
 ```
 
 3. NanoGUI
@@ -60,8 +62,10 @@ We will use the GLFW provided in NanoGUI, therefore, you **DO NOT** need to do a
 
 However, If you want to use system GLFW, you can run following command to install GLFW then update CMakeLists.txt ON YOUR OWN.
 ```
-######## OPTIONAL
+######## OPTIONAL ######## 
 $ brew install glfw3
+# remember to update CMakeLists.txt
+######## OPTIONAL ######## 
 ```
 
 #### Build
@@ -90,11 +94,13 @@ $ ./helloworld
 ```
 
 
-### Linux (In progress)
+### Linux (In progress, please do not follow)
 ```
+######## OPTIONAL ######## 
 $ sudo apt-get install libxinerama-dev
 $ sudo apt-get install libxcursor-dev
 $ sudo apt-get install libglew-dev libglfw3 libglfw3-dev libglm-dev pkg-config
+######## OPTIONAL ######## 
 ```
 
 
