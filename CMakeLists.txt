@@ -174,9 +174,6 @@ set( OPENGL_glu_LIBRARY
     "/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLU.dylib"
 )
 
-###### glfw
-#find_package(glfw3 REQUIRED)
-#include_directories(${GLFW_INCLUDE_DIRS})
 
 ###### glm
 # find_package(glm REQUIRED)
@@ -185,7 +182,13 @@ set( OPENGL_glu_LIBRARY
 # add_library(GLAD "${SRC_LIB}/glad.c")
 
 ###### glew
-find_package(glew REQUIRED)
+find_package(GLEW REQUIRED)
+if (GLEW_FOUND)
+    message(STATUS "GLEW_INCLUDE_DIRS: ${GLEW_INCLUDE_DIRS}, GLEW_LIBRARIES: ${GLEW_LIBRARIES}")
+    #include_directories(${GLEW_INCLUDE_DIRS})
+    #link_libraries(${GLEW_LIBRARIES})
+endif()
+# set(GLEW_INCLUDE_DIRS "/usr/local/lib/libGLEW.dylib")
 # set(GLEW_INCLUDE_DIRS "/usr/local/Cellar/glew/2.1.0_1/lib/libGLEW.2.1.0.dylib")
 
 
@@ -204,30 +207,39 @@ set_property(TARGET glfw glfw_objects nanogui PROPERTY FOLDER "dependencies")
 
 # NanoGUI merges the glfw objects into the library being built, 
 # you can actually just specify nanogui as the glfw dependency directly.
-#set(GLFW3_FOUND ON)
-#set(GLFW3_INCLUDE_DIRS /usr/include)
-#set(GLFW3_LIBRARIES /usr/lib/x86_64-linux-gnu/libglfw.so)
-#set(NANOGUI_LIBRARIES ${CMAKE_BINARY_DIR}/extern/nanogui/libnanogui.so)
-#link_directories( ${CMAKE_BINARY_DIR}/extern/nanogui/ )
 
 if (APPLE)
-    set(GLFW3_INCLUDE_DIRS ${APPLICATION_EXTERNAL}/nanogui/ext/glfw/include)
-    # set(NANOGUI_LIBRARIES ${CMAKE_BINARY_DIR}/extern/nanogui/libnanogui.dylib)
+    set(GLFW3_FOUND ON)
+    set(GLFW_INCLUDE_DIRS ${APPLICATION_EXTERNAL}/nanogui/ext/glfw/include)
     set(GLFW3_LIBRARIES ${CMAKE_BINARY_DIR}/extern/nanogui/ext_build/glfw/src/libglfw.dylib)
+    # set(GLFW_INCLUDE_DIRS "/usr/local/include/")
+    # set(GLFW3_LIBRARIES "/usr/local/lib/libglfw.dylib")
+    # set(NANOGUI_LIBRARIES ${CMAKE_BINARY_DIR}/extern/nanogui/libnanogui.dylib)
 endif(APPLE)
 
 if(LINUX)
-    set(GLFW3_INCLUDE_DIRS ${APPLICATION_EXTERNAL}/nanogui/ext/glfw/include)
+  set(GLFW3_FOUND ON)
+    set(GLFW_INCLUDE_DIRS ${APPLICATION_EXTERNAL}/nanogui/ext/glfw/include)
     set(NANOGUI_LIBRARIES ${CMAKE_BINARY_DIR}/extern/nanogui/libnanogui.so)
     set(GLFW3_LIBRARIES ${CMAKE_BINARY_DIR}/extern/nanogui/ext_build/glfw/src/libglfw.so)
+
+    #### if you want to use system GLFW, uncomment following two lines
+    # set(GLFW_INCLUDE_DIRS /usr/include)
+    # set(GLFW3_LIBRARIES /usr/lib/x86_64-linux-gnu/libglfw.so)
 endif(LINUX)
 
+
+###### glfw
 # nanogui should have glfw source
 # if not, we need to find
 if(NOT GLFW3_FOUND)
     find_package(GLFW3 REQUIRED)
 endif()
 
+
+#-------------------------------------------------------------------------------
+# Build
+#-------------------------------------------------------------------------------
 include_directories(
     ${APPLICATION_EXTERNAL}/nanogui/include
     ${APPLICATION_EXTERNAL}/nanogui/ext/eigen
@@ -238,13 +250,9 @@ include_directories(
     ${OPENGL_INCLUDE_DIRS}
     ${GLUT_INCLUDE_DIRS} 
     ${GLEW_INCLUDE_DIRS} 
-    ${GLFW3_INCLUDE_DIRS}
+    ${GLFW_INCLUDE_DIRS}
 )
 
-
-#-------------------------------------------------------------------------------
-# Build
-#-------------------------------------------------------------------------------
 add_executable(hello ${SRCS})
 
 # NanoGUI builds these
@@ -256,7 +264,7 @@ set( LIBS
     GL 
     GLEW 
     glfw 
-    ${GLEW_LIBRARY}
+    ${GLEW_LIBRARIES}
     ${OPENGL_gl_LIBRARY} 
     ${OPENGL_glu_LIBRARY} 
     ${NANOGUI_EXTRA_LIBS}
@@ -269,7 +277,7 @@ target_link_libraries( hello
         nanogui
         ${NANOGUI_EXTRA_LIBS}
     PRIVATE
-        ${GLEW_LIBRARY}
+        ${GLEW_LIBRARIES}
         ${OPENGL_gl_LIBRARY} 
         ${OPENGL_glu_LIBRARY} 
 )

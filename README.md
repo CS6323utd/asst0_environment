@@ -16,27 +16,30 @@ In order to ease the process of running on different platforms, we will be using
 
 ### Mac
 
-If you are working on OS X and do not have CMake installed, we recommend installing it through Macports:
-```
-sudo port install cmake
-```
-Or Homebrew:
+If you are working on OS X and do not have CMake installed, we recommend installing it through Homebrew:
 ```
 brew install cmake
 ```
 
 There are several dependencies that we need to rely on:
 1. C++11 and OpenGL
-These two should already setup in MacOS by default. You can verify by running
+
+You **DO NOT** need XCode for this assignment, although **Command Line Tools** is required.
+These two should already setup in MacOS by default. You can verify by running:
 ```
 # shows gcc version
 $ gcc -v 
 
-# shows /Library/Developer/CommandLineTools
+# shows "/Library/Developer/CommandLineTools"
 $ xcode-select -p
+# if swith from xcode to CLT
+$ sudo xcode-select -s /Library/Developer/CommandLineTools
+# if not installed, then run
+$ xcode-select --install
 ```
 
 2. GLEW
+
 If you installed Homebrew, simply just run:
 ```
 $ brew update
@@ -44,12 +47,13 @@ $ brew install glew
 ```
 
 3. NanoGUI
-We setup these dependencies in our cmake/*.cmake files, therefore, you don't need to do anything about it.
+
+We setup these dependencies in our cmake/*.cmake files, therefore, you **DO NOT** need to do anything about it.
 
 
 4. GLFW
-We will use the GLFW provided in NanoGUI, therefore, you don't need to do anything about it.
-If you want to use system GLFW, you can run following command to install GLFW then update CMakeLists.txt
+
+We will use the GLFW provided in NanoGUI, therefore, you **DO NOT** need to do anything. However, If you want to use system GLFW, you can run following command to install GLFW then update CMakeLists.txt on your own.
 ```
 # OPTIONAL
 $ brew install glfw3
