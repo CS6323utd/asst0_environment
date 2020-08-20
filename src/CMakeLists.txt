@@ -1,53 +1,117 @@
 cmake_minimum_required(VERSION 2.8)
 
-# source
-set(APPLICATION_SOURCE
-    main.cpp
-)
-
-# header
-set(APPLICATION_HEADER
-    shader.h
-)
-
 #-------------------------------------------------------------------------------
 # Set include directories
 #-------------------------------------------------------------------------------
 include_directories(
-  ${GLEW_INCLUDE_DIRS}
-  ${GLFW3_INCLUDE_DIRS}
+    ${FREETYPE_INCLUDE_DIRS}
+    ${CMU462_INCLUDE_DIRS}
+    ${GLEW_INCLUDE_DIRS}
+    ${GLFW_INCLUDE_DIRS}
 )
+
+include_directories(
+    ${APPLICATION_EXTERNAL}/nanogui/include
+    ${APPLICATION_EXTERNAL}/nanogui/ext/eigen
+    ${APPLICATION_EXTERNAL}/nanogui/ext/nanovg/src
+    ${APPLICATION_EXTERNAL}/nanogui/ext/glfw
+)
+
+if (WIN32)
+    include_directories(dirent)
+endif(WIN32)
+
+#-------------------------------------------------------------------------------
+# Set link directories
+#-------------------------------------------------------------------------------
+link_directories(
+    ${FREETYPE_LIBRARY_DIRS}
+    ${CMU462_LIBRARY_DIRS}
+    ${GLEW_LIBRARY_DIRS}
+    ${GLFW_LIBRARY_DIRS}
+)
+
+# Set drawsvg source
+set(CMU462_DRAWSVG_SOURCE
+    main.cpp
+)
+
+if (WIN32)
+    list(APPEND CMU462_DRAWSVG_SOURCE dirent/dirent.c)
+endif(WIN32)
+
+# Set drawsvg header
+set(CMU462_DRAWSVG_HEADER
+    shader.h
+)
+
+# Import hardware renderer
+# option(DRAWSVG_BUILD_HARDWARE_RENDERER  "Build hardware implementation"  ON)
+# include(hardware/hardware.cmake)
+
+# Import drawsvg reference
+# include(reference/reference.cmake)
 
 #-------------------------------------------------------------------------------
 # Add executable
 #-------------------------------------------------------------------------------
-add_executable( hello
-    ${APPLICATION_SOURCE}
-    ${APPLICATION_HEADER}
+add_executable( drawsvg
+    ${CMU462_DRAWSVG_SOURCE}
+    ${CMU462_DRAWSVG_HEADER}
+)
+
+# Link drawsvg executable (static link reference solution)
+target_link_libraries( drawsvg
+    nanogui ${NANOGUI_EXTRA_LIBS}
+    ${FREETYPE_LIBRARIES}
+    ${OPENGL_LIBRARIES}
+    CMU462 ${CMU462_LIBRARIES}
+    glew ${GLEW_LIBRARIES}
+    glfw ${GLFW_LIBRARIES}
 )
 
 
-target_link_libraries(hello
-  GLEW ${GLEW_LIBRARIES}
-  glfw ${GLFW3_LIBRARIES}
-  ${OPENGL_opengl_LIBRARY}
+if (APPLE) # Frameworks required on osx
+  target_link_libraries(drawsvg  
+    ${COCOA_LIBRARIES}
+    ${IOKIT_LIBRARIES}
+    ${COREVIDEO_LIBRARIES}
+  )
+else(UNIX)  #LINUX
+target_link_libraries( drawsvg
+    ${CMU462_LIBRARIES}
+    ${GLEW_LIBRARIES}
+    ${GLFW_LIBRARIES}
+    ${FREETYPE_LIBRARIES}
+    ${OPENGL_LIBRARIES}
+    -fopenmp 
+    -lXi 
+    -lXxf86vm 
+    -lXinerama 
+    -lXcursor 
+    -lXfixes 
+    -lXrandr 
+    -lXext 
+    -lXrender 
+    -lX11 
+    -lpthread 
+    -lxcb 
+    -lXau
 )
-
-message(STATUS "Found OPENGL in ${OPENGL_INCLUDE_DIR}, OPENGL_LIBRARIES ${OPENGL_opengl_LIBRARY}")
-message(STATUS "Found GLEW in ${GLEW_INCLUDE_DIRS}, GLEW_LIBRARIES ${GLEW_LIBRARIES}")
-message(STATUS "Found GLFW in ${GLFW3_INCLUDE_DIRS}, GLFW3_LIBRARIES ${GLFW3_LIBRARIES}")
-
-
-add_dependencies(hello nanogui glfw glfw_objects) # NanoGUI builds these
-
-
-#-------------------------------------------------------------------------------
-# Platform-specific configurations for target
-#-------------------------------------------------------------------------------
-if(APPLE)
-  set_property( TARGET hello APPEND_STRING PROPERTY COMPILE_FLAGS
-                "-Wno-deprecated-declarations -Wno-c++11-extensions")
-endif(APPLE)
+endif()
 
 # Put executable in build directory root
 set(EXECUTABLE_OUTPUT_PATH ..)
+
+# Install to project root
+install(TARGETS drawsvg DESTINATION ${drawsvg_SOURCE_DIR})
+
+# Copy Freetype DLLs to the build directory
+if(WIN32)
+    foreach(FREETYPE_DLL ${FREETYPE_RUNTIMELIBS})
+        add_custom_command(TARGET drawsvg POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${FREETYPE_DLL}"
+                $<TARGET_FILE_DIR:drawsvg>)
+    endforeach(FREETYPE_DLL)
+endif(WIN32)

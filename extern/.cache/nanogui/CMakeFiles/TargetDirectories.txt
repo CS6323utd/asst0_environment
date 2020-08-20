@@ -1,0 +1,3 @@
+/Users/NingnaWang/ninwang/asst0_environment/extern/.cache/nanogui/CMakeFiles/rebuild_cache.dir
+/Users/NingnaWang/ninwang/asst0_environment/extern/.cache/nanogui/CMakeFiles/edit_cache.dir
+/Users/NingnaWang/ninwang/asst0_environment/extern/.cache/nanogui/CMakeFiles/nanogui-download.dir

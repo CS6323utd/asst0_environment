@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/Users/NingnaWang/ninwang/asst0_environment/extern/.cache/nanogui/CMakeFiles/nanogui-download"
+		},
+		{
+			"file" : "/Users/NingnaWang/ninwang/asst0_environment/extern/.cache/nanogui/CMakeFiles/nanogui-download.rule"
+		},
+		{
+			"file" : "/Users/NingnaWang/ninwang/asst0_environment/extern/.cache/nanogui/CMakeFiles/nanogui-download-complete.rule"
+		},
+		{
+			"file" : "/Users/NingnaWang/ninwang/asst0_environment/extern/.cache/nanogui/nanogui-download-prefix/src/nanogui-download-stamp/nanogui-download-install.rule"
+		},
+		{
+			"file" : "/Users/NingnaWang/ninwang/asst0_environment/extern/.cache/nanogui/nanogui-download-prefix/src/nanogui-download-stamp/nanogui-download-mkdir.rule"
+		},
+		{
+			"file" : "/Users/NingnaWang/ninwang/asst0_environment/extern/.cache/nanogui/nanogui-download-prefix/src/nanogui-download-stamp/nanogui-download-download.rule"
+		},
+		{
+			"file" : "/Users/NingnaWang/ninwang/asst0_environment/extern/.cache/nanogui/nanogui-download-prefix/src/nanogui-download-stamp/nanogui-download-update.rule"
+		},
+		{
+			"file" : "/Users/NingnaWang/ninwang/asst0_environment/extern/.cache/nanogui/nanogui-download-prefix/src/nanogui-download-stamp/nanogui-download-patch.rule"
+		},
+		{
+			"file" : "/Users/NingnaWang/ninwang/asst0_environment/extern/.cache/nanogui/nanogui-download-prefix/src/nanogui-download-stamp/nanogui-download-configure.rule"
+		},
+		{
+			"file" : "/Users/NingnaWang/ninwang/asst0_environment/extern/.cache/nanogui/nanogui-download-prefix/src/nanogui-download-stamp/nanogui-download-build.rule"
+		},
+		{
+			"file" : "/Users/NingnaWang/ninwang/asst0_environment/extern/.cache/nanogui/nanogui-download-prefix/src/nanogui-download-stamp/nanogui-download-test.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"nanogui-download"
+		],
+		"name" : "nanogui-download"
+	}
+}

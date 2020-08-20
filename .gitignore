@@ -1,10 +1,6 @@
-# Extern
-/extern/.cache
-/extern/nanogui
+# Build directory
+build/
 
-# Build
-*build*/*
-.idea/*
-.vscode/
-/data
-.DS_Store
+# Useless files
+.DS_STORE
+*.swp
