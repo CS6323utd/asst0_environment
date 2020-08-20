@@ -1,3 +1,0 @@
-repository='https://github.com/wjakob/nanogui.git'
-module=''
-tag=''

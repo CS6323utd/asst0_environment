@@ -157,15 +157,34 @@ endif(WIN32)
 # Find dependencies
 #-------------------------------------------------------------------------------
 
-# Required packages
+# OpenGL
 find_package(OpenGL REQUIRED)
+find_package(GLUT REQUIRED)
+
+##### hardcoded opengl settings
+### please comment above two find_package and uncomment following sets if you see errors like 
+### "could NOT find OpenGL (missing: OPENGL_INCLUDE_DIR)"
+# set( OPENGL_INCLUDE_DIRS 
+#     "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/OpenGL.framework/Headers"
+# )
+# set( GLUT_INCLUDE_DIRS 
+#     "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers"
+# )
+# set( OPENGL_gl_LIBRARY 
+#     "/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib"
+# )
+# set( OPENGL_glu_LIBRARY 
+#     "/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLU.dylib"
+# )
+
+## not require so far
 find_package(Threads REQUIRED)
 if (NOT WIN32)
   find_package(Freetype REQUIRED)
 endif ()
 
 
-###### nanogui
+###### NanoGUI
 # Disable building extras we won't need (pure C++ project)
 set(NANOGUI_BUILD_EXAMPLE OFF CACHE BOOL " " FORCE)
 set(NANOGUI_BUILD_PYTHON  OFF CACHE BOOL " " FORCE)
@@ -179,7 +198,6 @@ include(Dependencies)
 # you can actually just specify nanogui as the glfw dependency directly.
 set(GLFW_FOUND ON)
 set(GLFW_INCLUDE_DIRS ${APPLICATION_EXTERNAL}/nanogui/ext/glfw/include)
-
 if (APPLE)
     # static lib, somehow not happy with dynamic lib
     set(GLFW_LIBRARIES ${CMAKE_BINARY_DIR}/extern/nanogui/ext_build/glfw/src/libglfw3.a)
@@ -188,8 +206,6 @@ if (APPLE)
     # set(GLFW_INCLUDE_DIRS "/usr/local/include/")
     # set(GLFW_LIBRARIES "/usr/local/lib/libglfw.dylib")
 endif(APPLE)
-
-
 if(LINUX)
     set(NANOGUI_LIBRARIES ${CMAKE_BINARY_DIR}/extern/nanogui/libnanogui.so)
     set(GLFW3_LIBRARIES ${CMAKE_BINARY_DIR}/extern/nanogui/ext_build/glfw/src/libglfw.so)
