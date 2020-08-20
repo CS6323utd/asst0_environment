@@ -20,6 +20,8 @@ If you are working on OS X and do not have CMake installed, we recommend install
 brew install cmake
 ```
 
+#### Dependencies
+
 There are several dependencies that we need to rely on:
 1. C++11 and OpenGL
 
@@ -61,6 +63,8 @@ However, If you want to use system GLFW, you can run following command to instal
 $ brew install glfw3
 ```
 
+#### Build
+
 To build your code for this assignment:
 - Create a directory to build your code:
 ```
@@ -80,7 +84,7 @@ $ make
 
 To run your executable file, simply
 ```
-$ ./hello
+$ ./helloworld
 ```
 
 
