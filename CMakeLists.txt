@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(drawsvg)
+project(helloworld)
 
 #-------------------------------------------------------------------------------
 # Build options
@@ -181,12 +181,22 @@ set(GLFW_FOUND ON)
 set(GLFW_INCLUDE_DIRS ${APPLICATION_EXTERNAL}/nanogui/ext/glfw/include)
 
 if (APPLE)
+    # static lib, somehow not happy with dynamic lib
     set(GLFW_LIBRARIES ${CMAKE_BINARY_DIR}/extern/nanogui/ext_build/glfw/src/libglfw3.a)
     # set(GLFW_LIBRARIES ${CMAKE_BINARY_DIR}/extern/nanogui/ext_build/glfw/src/libglfw.dylib)
+    #### if you want to use system GLFW, uncomment following two lines
     # set(GLFW_INCLUDE_DIRS "/usr/local/include/")
     # set(GLFW_LIBRARIES "/usr/local/lib/libglfw.dylib")
 endif(APPLE)
 
+
+if(LINUX)
+    set(NANOGUI_LIBRARIES ${CMAKE_BINARY_DIR}/extern/nanogui/libnanogui.so)
+    set(GLFW3_LIBRARIES ${CMAKE_BINARY_DIR}/extern/nanogui/ext_build/glfw/src/libglfw.so)
+    #### if you want to use system GLFW, uncomment following two lines
+    # set(GLFW_INCLUDE_DIRS /usr/include)
+    # set(GLFW3_LIBRARIES /usr/lib/x86_64-linux-gnu/libglfw.so)
+endif(LINUX)
 
 
 # CMU462
@@ -214,4 +224,4 @@ if(BUILD_DOCS)
 endif()
 
 # Install settings
-set(CMAKE_INSTALL_PREFIX "${drawsvg_SOURCE_DIR}/")
+set(CMAKE_INSTALL_PREFIX "${helloworld_SOURCE_DIR}/")
