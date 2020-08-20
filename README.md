@@ -13,13 +13,14 @@ This will create an asst0_environment folder with all the source files.
 In order to ease the process of running on different platforms, we will be using CMake for our assignments. You will need a CMake installation of version 3.5+ to build the code for this assignment. It should also be relatively easy to build the assignment and work locally on your OSX. Building on Linux is still working in process. Building on Windows is currently not supported, please refers to the old tuitorial.
 
 
-
 ### Mac
 
 If you are working on OS X and do not have CMake installed, we recommend installing it through Homebrew:
 ```
 brew install cmake
 ```
+
+#### Dependencies
 
 There are several dependencies that we need to rely on:
 1. C++11 and OpenGL
@@ -39,10 +40,11 @@ $ xcode-select --install
 ```
 
 2. GLEW
+We provide GLEW in our library, therefore, you **DO NOT** need to do anything. 
 
-If you installed Homebrew, simply just run:
+However, If you want to use system GLEW, you can run following command to install GLEW then update CMakeLists.txt ON YOUR OWN.
 ```
-$ brew update
+######## OPTIONAL
 $ brew install glew
 ```
 
@@ -53,16 +55,20 @@ We setup these dependencies in our cmake/*.cmake files, therefore, you **DO NOT*
 
 4. GLFW
 
-We will use the GLFW provided in NanoGUI, therefore, you **DO NOT** need to do anything. However, If you want to use system GLFW, you can run following command to install GLFW then update CMakeLists.txt on your own.
+We will use the GLFW provided in NanoGUI, therefore, you **DO NOT** need to do anything. 
+
+However, If you want to use system GLFW, you can run following command to install GLFW then update CMakeLists.txt ON YOUR OWN.
 ```
-# OPTIONAL
+######## OPTIONAL
 $ brew install glfw3
 ```
+
+#### Build
 
 To build your code for this assignment:
 - Create a directory to build your code:
 ```
-cd p1 && mkdir build && cd build
+$ cd asst0_environment && mkdir build && cd build
 ```
 
 - Run CMake to generate makefile (might take a while for the first run):
@@ -75,10 +81,11 @@ $ cmake ..
 $ make
 ```
 
+#### Run
 
 To run your executable file, simply
 ```
-$ ./hello
+$ ./helloworld
 ```
 
 
@@ -88,3 +95,11 @@ $ sudo apt-get install libxinerama-dev
 $ sudo apt-get install libxcursor-dev
 $ sudo apt-get install libglew-dev libglfw3 libglfw3-dev libglm-dev pkg-config
 ```
+
+
+## Acknoledge
+
+This repo use the **CMU462 Library** (https://github.com/cmu462/Scotty3D/tree/master/CMU462) for configuring OpenGL/GLFW/GLEW.
+
+This repo also use **DownloadProject** (https://github.com/Crascit/DownloadProject) for downloading and configuring NanoGUI. 
+

@@ -1,24 +1,26 @@
-cmake_minimum_required(VERSION 3.5)
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-
-
-#-------------------------------------------------------------------------------
-# Project name
-#-------------------------------------------------------------------------------
+cmake_minimum_required(VERSION 2.8)
 project(helloworld)
+
+#-------------------------------------------------------------------------------
+# Build options
+#-------------------------------------------------------------------------------
+option(BUILD_LIBCMU462 "Build with libCMU462"         ON)
+option(BUILD_DEBUG     "Build with debug settings"    OFF)
+option(BUILD_DOCS      "Build documentation"          OFF)
 
 
 #-------------------------------------------------------------------------------
 # Settings
 #-------------------------------------------------------------------------------
+# Add modules
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules/")
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(APPLICATION_EXTERNAL "${CMAKE_CURRENT_SOURCE_DIR}/extern")
 
-
-set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
-set(SRC_LIB "${CMAKE_CURRENT_SOURCE_DIR}/lib")
-
-file(GLOB SRCS "${SRC_DIR}/*.cpp","${SRC_DIR}/*.h")
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+  set(CMAKE_MACOSX_RPATH 1)
+endif()
 
 
 #-------------------------------------------------------------------------------
@@ -30,50 +32,45 @@ file(GLOB SRCS "${SRC_DIR}/*.cpp","${SRC_DIR}/*.h")
 ###################
 if(APPLE)
 
-  # Clang only
-  if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "CLANG")
+  # OSX Framework dependencies
+  if(NOT BUILD_LIBCMU462)
+    include_directories( "/System/Library/Frameworks" )
+    find_library (COCOA_LIBRARIES Cocoa)
+    find_library (IOKIT_LIBRARIES IOkit)
+    find_library (COREVIDEO_LIBRARIES CoreVideo)
+  endif()
 
-    # OSX Framework dependencies
-    if(NOT BUILD_LIBCMU462)
-      include_directories( "/System/Library/Frameworks" )
-      find_library (COCOA_LIBRARIES Cocoa)
-      find_library (IOKIT_LIBRARIES IOkit)
-      find_library (COREVIDEO_LIBRARIES CoreVideo)
-    endif()
+  # Clang configuration
+  if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 
-    # Clang configuration
-    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang")
+    set(CLANG_CXX_FLAGS "-std=c++11 -m64")
 
-      set(CLANG_CXX_FLAGS "-std=c++11 -m64")
+    if(BUILD_DEBUG)
+      set(CMAKE_BUILD_TYPE Debug)
+    else(BUILD_DEBUG)
+      set(CLANG_CXX_FLAGS "${CLANG_CXX_FLAGS} -O3")
+      set(CLANG_CXX_FLAGS "${CLANG_CXX_FLAGS} -funroll-loops")
+      set(CLANG_CXX_FLAGS "${CLANG_CXX_FLAGS} -Wno-narrowing")
+      set(CLANG_CXX_FLAGS "${CLANG_CXX_FLAGS} -Wno-deprecated-register")
+    endif(BUILD_DEBUG)
 
-      if(BUILD_DEBUG)
-        set(CMAKE_BUILD_TYPE Debug)
-      else(BUILD_DEBUG)
-        set(CLANG_CXX_FLAGS "${CLANG_CXX_FLAGS} -O3")
-        set(CLANG_CXX_FLAGS "${CLANG_CXX_FLAGS} -funroll-loops")
-        set(CLANG_CXX_FLAGS "${CLANG_CXX_FLAGS} -Wno-narrowing")
-        set(CLANG_CXX_FLAGS "${CLANG_CXX_FLAGS} -Wno-deprecated-register")
-      endif(BUILD_DEBUG)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CLANG_CXX_FLAGS}")
 
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CLANG_CXX_FLAGS}")
+  endif()
 
-    endif()
+  # GCC configuration
+  if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 
-    # GCC configuration
-    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    set(GCC_CXX_FLAGS "-std=gnu++11 -m64")
 
-      set(GCC_CXX_FLAGS "-std=gnu++11 -m64")
+    if(BUILD_DEBUG)
+      set(CMAKE_BUILD_TYPE Debug)
+    else(BUILD_DEBUG)
+      set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -O3")
+      set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -fopenmp")
+    endif(BUILD_DEBUG)
 
-      if(BUILD_DEBUG)
-        set(CMAKE_BUILD_TYPE Debug)
-      else(BUILD_DEBUG)
-        set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -O3")
-        set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -fopenmp")
-      endif(BUILD_DEBUG)
-
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_CXX_FLAGS}")
-
-    endif()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_CXX_FLAGS}")
 
   endif()
 
@@ -86,7 +83,7 @@ set(LINUX UNIX AND NOT APPLE)
 if(LINUX)
 
   # GCC only
-  if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+  if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
 
     set(GCC_CXX_FLAGS "-std=gnu++11 -m64")
 
@@ -128,6 +125,8 @@ if(WIN32)
   if(MSVC)
 
     set(MSVC_CXX_FLAGS "-std=gnu++11")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MD")
 
     if(BUILD_DEBUG)
         set(CMAKE_BUILD_TYPE Debug)
@@ -135,6 +134,7 @@ if(WIN32)
     endif(BUILD_DEBUG)
 
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${MSVC_CXX_FLAGS}")
+    add_definitions(-D_USE_MATH_DEFINES)
 
   endif(MSVC)
 
@@ -153,131 +153,91 @@ if(WIN32)
 
 endif(WIN32)
 
-
 #-------------------------------------------------------------------------------
-# Find dependencies (3rd party libraries)
+# Find dependencies
 #-------------------------------------------------------------------------------
 
-###### opengl
-# find_package(OpenGL REQUIRED)
-# find_package(GLUT REQUIRED)
-set( OPENGL_INCLUDE_DIRS 
-    "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/OpenGL.framework/Headers"
-)
-set( GLUT_INCLUDE_DIRS 
-    "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers"
-)
-set( OPENGL_gl_LIBRARY 
-    "/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib"
-)
-set( OPENGL_glu_LIBRARY 
-    "/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLU.dylib"
-)
+# OpenGL
+find_package(OpenGL REQUIRED)
+find_package(GLUT REQUIRED)
+
+##### hardcoded opengl settings
+### please comment above two find_package and uncomment following sets if you see errors like 
+### "could NOT find OpenGL (missing: OPENGL_INCLUDE_DIR)"
+# set( OPENGL_INCLUDE_DIRS 
+#     "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/OpenGL.framework/Headers"
+# )
+# set( GLUT_INCLUDE_DIRS 
+#     "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers"
+# )
+# set( OPENGL_gl_LIBRARY 
+#     "/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib"
+# )
+# set( OPENGL_glu_LIBRARY 
+#     "/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLU.dylib"
+# )
+
+## not require so far
+find_package(Threads REQUIRED)
+if (NOT WIN32)
+  find_package(Freetype REQUIRED)
+endif ()
 
 
-###### glm
-# find_package(glm REQUIRED)
-
-###### glad
-# add_library(GLAD "${SRC_LIB}/glad.c")
-
-###### glew
-find_package(GLEW REQUIRED)
-if (GLEW_FOUND)
-    message(STATUS "GLEW_INCLUDE_DIRS: ${GLEW_INCLUDE_DIRS}, GLEW_LIBRARIES: ${GLEW_LIBRARIES}")
-    #include_directories(${GLEW_INCLUDE_DIRS})
-    #link_libraries(${GLEW_LIBRARIES})
-endif()
-# set(GLEW_INCLUDE_DIRS "/usr/local/lib/libGLEW.dylib")
-# set(GLEW_INCLUDE_DIRS "/usr/local/Cellar/glew/2.1.0_1/lib/libGLEW.2.1.0.dylib")
-
-
-###### nanogui
-
+###### NanoGUI
 # Disable building extras we won't need (pure C++ project)
 set(NANOGUI_BUILD_EXAMPLE OFF CACHE BOOL " " FORCE)
 set(NANOGUI_BUILD_PYTHON  OFF CACHE BOOL " " FORCE)
 set(NANOGUI_INSTALL       OFF CACHE BOOL " " FORCE)
+set(NANOGUI_BUILD_SHARED  OFF  CACHE BOOL " " FORCE)
 
-# install nanogui and add_subdirectory
+# install nanogui and build
 include(Dependencies)
-
-# For reliability of parallel build, make the NanoGUI targets dependencies
-set_property(TARGET glfw glfw_objects nanogui PROPERTY FOLDER "dependencies")
 
 # NanoGUI merges the glfw objects into the library being built, 
 # you can actually just specify nanogui as the glfw dependency directly.
-
+set(GLFW_FOUND ON)
+set(GLFW_INCLUDE_DIRS ${APPLICATION_EXTERNAL}/nanogui/ext/glfw/include)
 if (APPLE)
-    set(GLFW3_FOUND ON)
-    set(GLFW_INCLUDE_DIRS ${APPLICATION_EXTERNAL}/nanogui/ext/glfw/include)
-    set(GLFW3_LIBRARIES ${CMAKE_BINARY_DIR}/extern/nanogui/ext_build/glfw/src/libglfw.dylib)
+    # static lib, somehow not happy with dynamic lib
+    set(GLFW_LIBRARIES ${CMAKE_BINARY_DIR}/extern/nanogui/ext_build/glfw/src/libglfw3.a)
+    # set(GLFW_LIBRARIES ${CMAKE_BINARY_DIR}/extern/nanogui/ext_build/glfw/src/libglfw.dylib)
+    #### if you want to use system GLFW, uncomment following two lines
     # set(GLFW_INCLUDE_DIRS "/usr/local/include/")
-    # set(GLFW3_LIBRARIES "/usr/local/lib/libglfw.dylib")
-    # set(NANOGUI_LIBRARIES ${CMAKE_BINARY_DIR}/extern/nanogui/libnanogui.dylib)
+    # set(GLFW_LIBRARIES "/usr/local/lib/libglfw.dylib")
 endif(APPLE)
-
 if(LINUX)
-  set(GLFW3_FOUND ON)
-    set(GLFW_INCLUDE_DIRS ${APPLICATION_EXTERNAL}/nanogui/ext/glfw/include)
     set(NANOGUI_LIBRARIES ${CMAKE_BINARY_DIR}/extern/nanogui/libnanogui.so)
     set(GLFW3_LIBRARIES ${CMAKE_BINARY_DIR}/extern/nanogui/ext_build/glfw/src/libglfw.so)
-
     #### if you want to use system GLFW, uncomment following two lines
     # set(GLFW_INCLUDE_DIRS /usr/include)
     # set(GLFW3_LIBRARIES /usr/lib/x86_64-linux-gnu/libglfw.so)
 endif(LINUX)
 
 
-###### glfw
-# nanogui should have glfw source
-# if not, we need to find
-if(NOT GLFW3_FOUND)
-    find_package(GLFW3 REQUIRED)
+# CMU462
+if(BUILD_LIBCMU462)
+  add_subdirectory(CMU462)
+  include_directories(CMU462/include)
+  include_directories(CMU462/include/CMU462)
+else(BUILD_LIBCMU462)
+  find_package(CMU462 REQUIRED)
+  find_package(GLEW REQUIRED)
+  find_package(GLFW REQUIRED)
+endif(BUILD_LIBCMU462)
+
+#-------------------------------------------------------------------------------
+# Add subdirectories
+#-------------------------------------------------------------------------------
+add_subdirectory(src)
+
+# build documentation
+if(BUILD_DOCS)
+  find_package(DOXYGEN)
+  if(DOXYGEN_FOUND AND BUILD_DOCS)
+    add_subdirectory(docs)
+  endif()
 endif()
 
-
-#-------------------------------------------------------------------------------
-# Build
-#-------------------------------------------------------------------------------
-include_directories(
-    ${APPLICATION_EXTERNAL}/nanogui/include
-    ${APPLICATION_EXTERNAL}/nanogui/ext/eigen
-    ${APPLICATION_EXTERNAL}/nanogui/ext/nanovg/src
-    ${APPLICATION_EXTERNAL}/nanogui/ext/glfw
-)
-include_directories(
-    ${OPENGL_INCLUDE_DIRS}
-    ${GLUT_INCLUDE_DIRS} 
-    ${GLEW_INCLUDE_DIRS} 
-    ${GLFW_INCLUDE_DIRS}
-)
-
-add_executable(hello ${SRCS})
-
-# NanoGUI builds these
-add_dependencies(hello nanogui glfw) 
-
-set( LIBS 
-    ${LIBS} 
-    nanogui 
-    GL 
-    GLEW 
-    glfw 
-    ${GLEW_LIBRARIES}
-    ${OPENGL_gl_LIBRARY} 
-    ${OPENGL_glu_LIBRARY} 
-    ${NANOGUI_EXTRA_LIBS}
-)
-
-message(STATUS "LIBS: ${LIBS}")
-
-target_link_libraries( hello
-    PUBLIC
-        nanogui
-        ${NANOGUI_EXTRA_LIBS}
-    PRIVATE
-        ${GLEW_LIBRARIES}
-        ${OPENGL_gl_LIBRARY} 
-        ${OPENGL_glu_LIBRARY} 
-)
+# Install settings
+set(CMAKE_INSTALL_PREFIX "${helloworld_SOURCE_DIR}/")
