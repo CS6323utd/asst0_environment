@@ -40,6 +40,7 @@ $ xcode-select --install
 ```
 
 2. GLEW
+
 We provide GLEW in our library, therefore, you **DO NOT** need to do anything. 
 
 However, If you want to use system GLEW, you can run following command to install GLEW then update CMakeLists.txt ON YOUR OWN.
