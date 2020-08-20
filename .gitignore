@@ -1,0 +1,10 @@
+# Extern
+/extern/.cache
+/extern/nanogui
+
+# Build
+*build*/*
+.idea/*
+.vscode/
+/data
+.DS_Store
