@@ -1,5 +1,5 @@
 /*
-    src/example3.cpp -- C++ version of an example application that shows
+    src/main.cpp -- C++ version of an example application that shows
     how to use nanogui in an application with an already created and managed
     glfw context.
     NanoGUI was developed by Wenzel Jakob <wenzel.jakob@epfl.ch>.
@@ -75,7 +75,7 @@ int main(int /* argc */, char ** /* argv */) {
     glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
     // Create a GLFWwindow object
-    GLFWwindow* window = glfwCreateWindow(800, 800, "example3", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(800, 800, "asst0", nullptr, nullptr);
     if (window == nullptr) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
@@ -183,7 +183,7 @@ int main(int /* argc */, char ** /* argv */) {
 
 
     // Build and compile our shader program
-    Shader ourShader("shader/basic.vs", "shader/basic.frag");
+    Shader ourShader("../src/shader/basic.vs", "../src/shader/basic.frag");
 
 
     // Set up vertex data (and buffer(s)) and attribute pointers
@@ -212,23 +212,32 @@ int main(int /* argc */, char ** /* argv */) {
     glBindVertexArray(0); // Unbind VAO
     
 
-    // Game loop
-    while (!glfwWindowShouldClose(window)) {
-        // Check if any events have been activated (key pressed, mouse moved etc.) and call corresponding response functions
+   // Game loop
+    while (!glfwWindowShouldClose(window))
+    {
+        // Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
         glfwPollEvents();
 
-        glClearColor(0.2f, 0.25f, 0.3f, 1.0f);
+        // Render
+        // Clear the colorbuffer
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Draw nanogui
-        screen->drawContents();
+        // Draw the triangle
+        ourShader.use();
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glBindVertexArray(0);
+
         screen->drawWidgets();
 
+        // Swap the screen buffers
         glfwSwapBuffers(window);
     }
-
+    // Properly de-allocate all resources once they've outlived their purpose
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
     // Terminate GLFW, clearing any resources allocated by GLFW.
     glfwTerminate();
-
     return 0;
 }

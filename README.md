@@ -20,9 +20,30 @@ If you are working on OS X and do not have CMake installed, we recommend install
 brew install cmake
 ```
 
-#### Dependencies
+#### Build & Run
 
-There are several dependencies that we need to rely on:
+To build your code for this assignment:
+```
+$ cd asst0_environment && mkdir build && cd build
+$ cmake ..
+$ make
+```
+These steps (1) create an out-of-source build directory, (2) configure the project using CMake, and (3) compile the project. If all goes well, you should see an executable app in the build directory. As you work, simply typing ```make``` in the build directory will recompile the project.
+
+#### Run
+
+When you have successfully built your code, you will get an executable named **helloworld**. The helloworld executable do not take any argument. When you first run the application, you will see a picture of shaded triangle. 
+
+To run your executable file:
+```
+$ ./helloworld
+```
+
+#### Dependencies / Troubleshooting
+
+There are several dependencies we need to rely on, but for most of them you do not need to do anything, we've configured all of them through CMake. This section is just for you to be aware of all the dependencies, and if you have some issues during building process, you can 
+
+
 1. C++11 and OpenGL
 
 You **DO NOT** need XCode for this assignment, although **Command Line Tools** is required.
@@ -66,31 +87,6 @@ However, If you want to use system GLFW, you can run following command to instal
 $ brew install glfw3
 # remember to update CMakeLists.txt
 ######## OPTIONAL ######## 
-```
-
-#### Build
-
-To build your code for this assignment:
-- Create a directory to build your code:
-```
-$ cd asst0_environment && mkdir build && cd build
-```
-
-- Run CMake to generate makefile (might take a while for the first run):
-```
-$ cmake ..
-```
-
-- Build your code (might take a while for the first run):
-```
-$ make
-```
-
-#### Run
-
-To run your executable file, simply
-```
-$ ./helloworld
 ```
 
 

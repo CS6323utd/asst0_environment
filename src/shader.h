@@ -21,10 +21,6 @@ public:
 		std::ifstream f_shader_file;
 		std::ifstream g_shader_file;
 
-
-		std::cout << "vertex_shader_path: " << vertex_shader_path << std::endl;
-		std::cout << "fragment_shader_path: " << fragment_shader_path << std::endl;
-
 		v_shader_file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 		f_shader_file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 		g_shader_file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
@@ -93,7 +89,7 @@ private:
 		GLint success;
 		GLchar info_log[1024];
 		if (type == "PROGRAM") {
-			glGetShaderiv(shader, GL_LINK_STATUS, &success);
+			glGetProgramiv(shader, GL_LINK_STATUS, &success);
 			if (!success) {
 				glGetShaderInfoLog(shader, 1024, NULL, info_log);
 				std::cout << "| Error:: PROGRAM-LINKING-ERROR of type: " << type << "|\n" << info_log << "\n| -- --------------------------------------------------- -- |\n";
