@@ -32,13 +32,17 @@ These steps (1) create an out-of-source build directory, (2) configure the proje
 
 #### Run
 
-When you have successfully built your code, you will get an executable named **helloworld**. The helloworld executable do not take any argument. When you first run the application, you will see a colored triangle on GUI.
+When you have successfully built your code, you will get an executable named **helloworld**. The helloworld executable do not take any argument. 
 
 To run your executable file:
 ```
 # under build folder
 $ ./helloworld
 ```
+
+When you first run the application, you will see a colored triangle on GUI.
+
+<img src="https://github.com/CS6323utd/asst0_environment/blob/master/demo/triangle.png" width="300" height="300">
 
 #### Dependencies / Troubleshooting
 
