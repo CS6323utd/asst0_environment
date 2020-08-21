@@ -15,12 +15,12 @@ In order to ease the process of running on different platforms, we will be using
 
 ### Mac
 
-If you are working on OS X and do not have CMake installed, we recommend installing it through Homebrew:
+If you are working on OS X and do not have CMake installed, we recommend installing it through [**Homebrew**](https://brew.sh/):
 ```
 brew install cmake
 ```
 
-#### Build & Run
+#### Build
 
 To build your code for this assignment:
 ```
@@ -32,16 +32,17 @@ These steps (1) create an out-of-source build directory, (2) configure the proje
 
 #### Run
 
-When you have successfully built your code, you will get an executable named **helloworld**. The helloworld executable do not take any argument. When you first run the application, you will see a picture of shaded triangle. 
+When you have successfully built your code, you will get an executable named **helloworld**. The helloworld executable do not take any argument. When you first run the application, you will see a colored triangle on GUI.
 
 To run your executable file:
 ```
+# under build folder
 $ ./helloworld
 ```
 
 #### Dependencies / Troubleshooting
 
-There are several dependencies we need to rely on, but for most of them you do not need to do anything, we've configured all of them through CMake. This section is just for you to be aware of all the dependencies. If you have any issue during building process, please double check following dependencies before coming to TA's office hour.
+There are several dependencies we need to rely on, but for most of them you do not need to do anything, we've configured all of them through CMake. This section is just for you to be aware of these dependencies. If you have any issue during building process, please double check following dependencies before coming to TA's office hour.
 
 
 1. C++11 and OpenGL
@@ -54,8 +55,10 @@ $ gcc -v
 
 # shows "/Library/Developer/CommandLineTools"
 $ xcode-select -p
+
 # if swith from xcode to CLT
 $ sudo xcode-select -s /Library/Developer/CommandLineTools
+
 # if not installed, then run
 $ xcode-select --install
 ```
