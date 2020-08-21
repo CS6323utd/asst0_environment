@@ -41,7 +41,7 @@ $ ./helloworld
 
 #### Dependencies / Troubleshooting
 
-There are several dependencies we need to rely on, but for most of them you do not need to do anything, we've configured all of them through CMake. This section is just for you to be aware of all the dependencies, and if you have some issues during building process, you can double check following dependencies. 
+There are several dependencies we need to rely on, but for most of them you do not need to do anything, we've configured all of them through CMake. This section is just for you to be aware of all the dependencies. If you have any issue during building process, please double check following dependencies before coming to TA's office hour.
 
 
 1. C++11 and OpenGL
@@ -100,7 +100,7 @@ $ sudo apt-get install libglew-dev libglfw3 libglfw3-dev libglm-dev pkg-config
 ```
 
 
-## Acknoledge
+## Acknowledge
 
 This repo use the **CMU462 Library** (https://github.com/cmu462/Scotty3D/tree/master/CMU462) for configuring OpenGL/GLFW/GLEW.
 
