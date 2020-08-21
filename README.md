@@ -41,7 +41,7 @@ $ ./helloworld
 
 #### Dependencies / Troubleshooting
 
-There are several dependencies we need to rely on, but for most of them you do not need to do anything, we've configured all of them through CMake. This section is just for you to be aware of all the dependencies, and if you have some issues during building process, you can 
+There are several dependencies we need to rely on, but for most of them you do not need to do anything, we've configured all of them through CMake. This section is just for you to be aware of all the dependencies, and if you have some issues during building process, you can double check following dependencies. 
 
 
 1. C++11 and OpenGL
