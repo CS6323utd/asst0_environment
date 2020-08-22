@@ -46,7 +46,7 @@ When you first run the application, you will see a colored triangle on GUI.
 There are several dependencies we need to rely on, but for most of them you do not need to do anything, we've configured all of them through CMake. This section is just for you to be aware of these dependencies. If you have any issue during building process, please double check following dependencies before coming to TA's office hour.
 
 
-1. C++11 and OpenGL
+#### 1. C++11 and OpenGL
 
 You **DO NOT** need XCode for this assignment, although **Command Line Tools** is required.
 These two should already setup in MacOS by default. You can verify by running:
@@ -64,7 +64,7 @@ $ sudo xcode-select -s /Library/Developer/CommandLineTools
 $ xcode-select --install
 ```
 
-2. GLEW
+#### 2. GLEW
 
 We provide GLEW in our library, therefore, you **DO NOT** need to do anything. 
 
@@ -87,12 +87,12 @@ $ brew install glew
 ######## OPTIONAL ######## 
 ```
 
-3. NanoGUI
+#### 3. NanoGUI
 
 We setup these dependencies in our cmake/*.cmake files, therefore, you **DO NOT** need to do anything about it.
 
 
-4. GLFW
+#### 4. GLFW
 
 We will use the GLFW provided in NanoGUI, therefore, you **DO NOT** need to do anything. 
 
@@ -104,8 +104,7 @@ $ brew install glfw3
 ######## OPTIONAL ######## 
 ```
 
-
-5. Freetype
+#### 5. Freetype
 
 This is required by lib CMU462, Freetype header files and dynamic library should be pre-installed on MacOS, therefore, you **DO NOT** need to do anything. 
 
