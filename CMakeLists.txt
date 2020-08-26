@@ -2,14 +2,6 @@ cmake_minimum_required(VERSION 2.8)
 project(helloworld)
 
 #-------------------------------------------------------------------------------
-# Build options
-#-------------------------------------------------------------------------------
-option(BUILD_LIBCMU462 "Build with libCMU462"         ON)
-option(BUILD_DEBUG     "Build with debug settings"    OFF)
-option(BUILD_DOCS      "Build documentation"          OFF)
-
-
-#-------------------------------------------------------------------------------
 # Settings
 #-------------------------------------------------------------------------------
 # Add modules
@@ -21,6 +13,8 @@ set(APPLICATION_EXTERNAL "${CMAKE_CURRENT_SOURCE_DIR}/extern")
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   set(CMAKE_MACOSX_RPATH 1)
 endif()
+
+set(APP_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/include")
 
 
 #-------------------------------------------------------------------------------
@@ -161,76 +155,24 @@ endif(WIN32)
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 
-##### hardcoded opengl settings
-### please comment above two find_package and uncomment following sets if you see errors like 
-### "could NOT find OpenGL (missing: OPENGL_INCLUDE_DIR)"
-# set( OPENGL_INCLUDE_DIRS 
-#     "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/OpenGL.framework/Headers"
-# )
-# set( GLUT_INCLUDE_DIRS 
-#     "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers"
-# )
-# set( OPENGL_gl_LIBRARY 
-#     "/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib"
-# )
-# set( OPENGL_glu_LIBRARY 
-#     "/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLU.dylib"
-# )
+# Use pkg-config for GLEW if available
+find_package(PkgConfig QUIET)
 
-## not require so far
-find_package(Threads REQUIRED)
-if (NOT WIN32)
-  find_package(Freetype REQUIRED)
-endif ()
+# GLEW
+if(PKGCONFIG_FOUND)
+  pkg_search_module(GLEW QUIET GLEW)
+else(PKGCONFIG_FOUND)
+  find_package(GLEW QUIET)
+endif()
+if(NOT GLEW_FOUND)
+  add_subdirectory("${PROJECT_SOURCE_DIR}/deps/glew")
+  set_property( TARGET glew APPEND_STRING PROPERTY COMPILE_FLAGS -w )
+endif()
 
 
-###### NanoGUI
-# Disable building extras we won't need (pure C++ project)
-set(NANOGUI_BUILD_EXAMPLE OFF CACHE BOOL " " FORCE)
-set(NANOGUI_BUILD_PYTHON  OFF CACHE BOOL " " FORCE)
-set(NANOGUI_INSTALL       OFF CACHE BOOL " " FORCE)
-set(NANOGUI_BUILD_SHARED  OFF  CACHE BOOL " " FORCE)
-
-# install nanogui and build
+# NanoGUI
 include(Dependencies)
-include_directories(
-    ${APPLICATION_EXTERNAL}/nanogui/include
-    ${APPLICATION_EXTERNAL}/nanogui/ext/eigen
-    ${APPLICATION_EXTERNAL}/nanogui/ext/nanovg/src
-    ${APPLICATION_EXTERNAL}/nanogui/ext/glfw
-)
 
-# NanoGUI merges the glfw objects into the library being built, 
-# you can actually just specify nanogui as the glfw dependency directly.
-set(GLFW_FOUND ON)
-set(GLFW_INCLUDE_DIRS ${APPLICATION_EXTERNAL}/nanogui/ext/glfw/include)
-if (APPLE)
-    # static lib, somehow not happy with dynamic lib
-    set(GLFW_LIBRARIES ${CMAKE_BINARY_DIR}/extern/nanogui/ext_build/glfw/src/libglfw3.a)
-    # set(GLFW_LIBRARIES ${CMAKE_BINARY_DIR}/extern/nanogui/ext_build/glfw/src/libglfw.dylib)
-    #### if you want to use system GLFW, uncomment following two lines
-    # set(GLFW_INCLUDE_DIRS "/usr/local/include/")
-    # set(GLFW_LIBRARIES "/usr/local/lib/libglfw.dylib")
-endif(APPLE)
-if(LINUX)
-    set(NANOGUI_LIBRARIES ${CMAKE_BINARY_DIR}/extern/nanogui/libnanogui.so)
-    set(GLFW3_LIBRARIES ${CMAKE_BINARY_DIR}/extern/nanogui/ext_build/glfw/src/libglfw.so)
-    #### if you want to use system GLFW, uncomment following two lines
-    # set(GLFW_INCLUDE_DIRS /usr/include)
-    # set(GLFW3_LIBRARIES /usr/lib/x86_64-linux-gnu/libglfw.so)
-endif(LINUX)
-
-
-# CMU462
-if(BUILD_LIBCMU462)
-  add_subdirectory(CMU462)
-  include_directories(CMU462/include)
-  include_directories(CMU462/include/CMU462)
-else(BUILD_LIBCMU462)
-  find_package(CMU462 REQUIRED)
-  find_package(GLEW REQUIRED)
-  find_package(GLFW REQUIRED)
-endif(BUILD_LIBCMU462)
 
 #-------------------------------------------------------------------------------
 # Add subdirectories
