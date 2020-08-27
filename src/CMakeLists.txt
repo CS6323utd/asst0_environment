@@ -4,10 +4,9 @@ cmake_minimum_required(VERSION 2.8)
 # Set include directories
 #-------------------------------------------------------------------------------
 include_directories(
-    ${FREETYPE_INCLUDE_DIRS}
-    ${CMU462_INCLUDE_DIRS}
     ${GLEW_INCLUDE_DIRS}
     ${GLFW_INCLUDE_DIRS}
+    ${APP_INCLUDE_DIRS}
 )
 
 if (WIN32)
@@ -18,8 +17,6 @@ endif(WIN32)
 # Set link directories
 #-------------------------------------------------------------------------------
 link_directories(
-    ${FREETYPE_LIBRARY_DIRS}
-    ${CMU462_LIBRARY_DIRS}
     ${GLEW_LIBRARY_DIRS}
     ${GLFW_LIBRARY_DIRS}
 )
@@ -56,9 +53,7 @@ add_executable( helloworld
 # Link helloworld executable (static link reference solution)
 target_link_libraries( helloworld
     nanogui ${NANOGUI_EXTRA_LIBS}
-    ${FREETYPE_LIBRARIES}
     ${OPENGL_LIBRARIES}
-    CMU462 ${CMU462_LIBRARIES}
     glew ${GLEW_LIBRARIES}
     glfw ${GLFW_LIBRARIES}
 )
@@ -72,10 +67,8 @@ if (APPLE) # Frameworks required on osx
   )
 else(UNIX)  #LINUX
 target_link_libraries( helloworld
-    ${CMU462_LIBRARIES}
     ${GLEW_LIBRARIES}
     ${GLFW_LIBRARIES}
-    ${FREETYPE_LIBRARIES}
     ${OPENGL_LIBRARIES}
     -fopenmp 
     -lXi 
@@ -98,13 +91,3 @@ set(EXECUTABLE_OUTPUT_PATH ..)
 
 # Install to project root
 install(TARGETS helloworld DESTINATION ${helloworld_SOURCE_DIR})
-
-# Copy Freetype DLLs to the build directory
-if(WIN32)
-    foreach(FREETYPE_DLL ${FREETYPE_RUNTIMELIBS})
-        add_custom_command(TARGET helloworld POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                "${FREETYPE_DLL}"
-                $<TARGET_FILE_DIR:helloworld>)
-    endforeach(FREETYPE_DLL)
-endif(WIN32)

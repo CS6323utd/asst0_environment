@@ -66,7 +66,7 @@ $ xcode-select --install
 
 #### 2. GLEW
 
-We provide GLEW in our library, therefore, you **DO NOT** need to do anything. 
+We provide GLEW in our library (under ``deps`` folder), therefore, you **DO NOT** need to do anything. 
 
 However, some might encounter follwing issue during while running  ```make```:
 ```
@@ -104,34 +104,8 @@ $ brew install glfw3
 ######## OPTIONAL ######## 
 ```
 
-#### 5. Freetype
-
-This is required by lib CMU462, Freetype header files and dynamic library should be pre-installed on MacOS, therefore, you **DO NOT** need to do anything. 
-
-However, some might encounter following issue while running ``cmake ..``:
-```
-Could NOT find Freetype (missing: FREETYPE_LIBRARY FREETYPE_INCLUDE_DIRS)
-```
-This is because your Mac does not have Freetype pre-installed for some reason, the solution would be simply just install it by running
-```
-brew install freetype
-```
-
-
-
-### Linux (In progress, please do not follow)
-```
-######## OPTIONAL ######## 
-$ sudo apt-get install libxinerama-dev
-$ sudo apt-get install libxcursor-dev
-$ sudo apt-get install libglew-dev libglfw3 libglfw3-dev libglm-dev pkg-config
-######## OPTIONAL ######## 
-```
-
 
 ## Acknowledge
 
-This repo use the **CMU462 Library** (https://github.com/cmu462/Scotty3D/tree/master/CMU462) for configuring OpenGL/GLFW/GLEW.
-
-This repo also use **DownloadProject** (https://github.com/Crascit/DownloadProject) for downloading and configuring NanoGUI. 
+This repo also use **DownloadProject** (https://github.com/Crascit/DownloadProject) for downloading and configuring NanoGUI (including GLFW). 
 
