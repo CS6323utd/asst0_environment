@@ -78,6 +78,10 @@ and one possible solution (from StackOverlow [post](https://stackoverflow.com/qu
 # ATTENTION: version number might be different!!!!
 export LIBRARY_PATH="$LIBRARY_PATH:/usr/local/Cellar/glew/2.1.0_1/lib/"
 ```
+then run source to execute the change:
+```
+source ~/.bash_profile
+```
 
 If you want to use system GLEW, you can run following command to install GLEW then update CMakeLists.txt ON YOUR OWN.
 ```
