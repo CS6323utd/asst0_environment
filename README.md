@@ -14,7 +14,7 @@ In order to ease the process of running on different platforms, we will be using
 
 If you are working on OS X and do not have CMake installed, we recommend installing it through [**Homebrew**](https://brew.sh/):
 ```
-brew install cmake
+$ brew install cmake
 ```
 
 ### Build
