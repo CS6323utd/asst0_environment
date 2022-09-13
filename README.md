@@ -3,7 +3,7 @@
 ## Getting started
 We will be distributing assignments with git. You can find the repository for this assignment at https://github.com/CS6323utd/asst0_environment. If you are unfamiliar with git, here is what you need to do to get the starter code:
 ```
-$ git clone https://github.com/CS6323utd/asst0_environment.git
+git clone https://github.com/CS6323utd/asst0_environment.git
 ```
 This will create an asst0_environment folder with all the source files.
 
